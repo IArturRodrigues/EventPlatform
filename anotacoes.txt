@@ -1,0 +1,6 @@
+libs {
+   date-fns: formatador de datas
+   vimejs: biblioteca de video utilizada nas aulas (caso ainda de erro no react 18 pode ser por conta de uma feature chamada Streaming Server Side Render, caso nao esteja utilizando basta instalar utilizando o --force OU entao diminuir a versao do react pra 17, porem so no caso de nao estar utilizando nenhuma feature nova do react 18 [nao recomendado de toda forma])
+   videojs: biblioteca de video alternativa
+   react-hook-form: lidar com formularios no react
+}
