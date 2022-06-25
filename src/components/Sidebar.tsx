@@ -1,30 +1,38 @@
-import { gql, useQuery } from "@apollo/client";
+import { useGetLessonsQuery } from "../graphql/generated";
 import { Lesson } from "./Lesson";
 
-const GET_LESSONS_QUERY = gql`
-   query LessonsQuery {
-      lessons(orderBy: avaliableAt_ASC, stage: PUBLISHED) {
-         id
-         lessonType
-         avaliableAt
-         title
-         slug
-      }
-   }
-`;
 
-interface GetLessonsQueryResponse {
-   lessons: {
-      id: string;
-      title: string;
-      slug: string;
-      avaliableAt: string;
-      lessonType: 'live' | 'class';
-   }[]
-}
+// forma de escrever a query sem usar o graphql-codegen {
+   // import { gql, useQuery } from "@apollo/client";
+
+   // const GET_LESSONS_QUERY = gql`
+   //    query LessonsQuery {
+   //       lessons(orderBy: availableAt_ASC, stage: PUBLISHED) {
+   //          id
+   //          lessonType
+   //          availableAt
+   //          title
+   //          slug
+   //       }
+   //    }
+   // `;
+   
+   // interface GetLessonsQueryResponse {
+   //    lessons: {
+   //       id: string;
+   //       title: string;
+   //       slug: string;
+   //       avaliableAt: string;
+   //       lessonType: 'live' | 'class';
+   //    }[]
+   // }
+   // usar dentro do function component {
+      // const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSONS_QUERY);
+   // }
+// }
 
 export function Sidebar() {
-   const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSONS_QUERY);
+   const { data } = useGetLessonsQuery();
 
    return (
       <aside className="w-[348px] bg-gray-700 p-6 border-l border-gray-600">
@@ -39,7 +47,7 @@ export function Sidebar() {
                      key={lesson.id}
                      title={lesson.title}
                      slug={lesson.slug}
-                     avaliableAt={new Date(lesson.avaliableAt)}
+                     avaliableAt={new Date(lesson.availableAt)}
                      type={lesson.lessonType}
                   />
                )

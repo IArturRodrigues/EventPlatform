@@ -1,6 +1,74 @@
 libs {
-   date-fns: formatador de datas
-   vimejs: biblioteca de video utilizada nas aulas (caso ainda de erro no react 18 pode ser por conta de uma feature chamada Streaming Server Side Render, caso nao esteja utilizando basta instalar utilizando o --force OU entao diminuir a versao do react pra 17, porem so no caso de nao estar utilizando nenhuma feature nova do react 18 [nao recomendado de toda forma])
-   videojs: biblioteca de video alternativa
-   react-hook-form: lidar com formularios no react
+   datas (Dates) {
+      date-fns: formatador de datas
+   }
+
+   video {
+      vimejs: biblioteca de video utilizada nas aulas (caso ainda de erro no react 18 pode ser por conta de uma feature chamada Streaming Server Side Render, caso nao esteja utilizando basta instalar utilizando o --force OU entao diminuir a versao do react pra 17, porem so no caso de nao estar utilizando nenhuma feature nova do react 18 [nao recomendado de toda forma])
+
+      videojs: biblioteca de video alternativa
+   }
+
+   formularios {
+      react-hook-form: lidar com formularios no react
+   }
+}
+
+sobre mutations no graphql usando CMS {
+   eh recomendado criar uma Permanent Auth Token para fazer o restante das funções que nao forem get
+   para criar precisa ir no painel de configuracoes da API no graph CMS criar uma nova caso nao tenha nenhuma
+   configurações de criação {
+      Content API {
+         Yes, initialize defaults
+         # Faz com que tenha a opção de leitura para todos os modelos publicados
+      }
+
+      O que eh: Sao as configurações padrão do graph CMS para quem tiver o token poder mexer na API conforme tiver as permissões
+      Management API {
+         No, I'll configure custom permissions
+      }
+   }
+}
+
+usando graphql-code-gen {
+   plugins como dependencias de desenvolvimento {
+      @graphql-codegen/typescript
+      @graphql-codegen/typescript-operations
+      @graphql-codegen/typescript-react-apollo
+      @graphql-codegen/cli
+   }
+
+   criar um arquivos de configuracoes pro codegen chamado codegen.yml
+   com as seguintes configs {
+      # nesse primeiro fica a API_URL (para saber onde encontrar no CMS basta ver o arquivo .env.local.exemplo)
+      schema: http://my-graphql-api.com/graphql # (colocar a URL sem aspas caso esteja com no arquivo .env)
+
+      # lugar onde ele vai procurar todas as querys e mutations feitas e que serao/estao sendo utilizadas no codigo
+      documents: './src/graphql/**/*.graphql'
+      
+      # arquivos que serao gerados de forma automatica pelo graphql-codegen a partir do schema da URL acima
+      generates:
+      ./src/graphql/generated.ts:
+         plugins:
+            - typescript
+            - typescript-operations
+            - typescript-react-apollo
+         config:
+            # pode suportar multiplas versoes (?)
+            reactApolloVersion: 3
+            # vai criar hooks especificos para cada query e mutation gerada
+            withHooks: true
+            # padrao antigo (class component) utilizando High Order Components
+            withHOC: false
+            # vai criar um component para cada query se deixar como true
+            withComponent: false
+   }
+
+   script {
+      "codegen": "graphql-codegen"
+   }
+   rodar esse script toda vez que criar, alterar, atualizar ou deletar uma ou varias query(ies) ou mutation(s)
+   tanto no site como no codigo
+
+   ao fazer as queries e mutations sempre lembrar de colocar o nome dela pois os hooks criados vem pelo nome de cada uma
 }

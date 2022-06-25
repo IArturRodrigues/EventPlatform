@@ -1,16 +1,27 @@
-import { gql, useMutation } from "@apollo/client";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../components/Logo";
+import { useCreateSubscriberMutation } from "../graphql/generated";
 
-// a exclamacao depois do tipo significa que eh um parametro obrigatorio
-const CREATE_SUBSCRIBER_MUTATION = gql`
-   mutation CreateSubscriber ($name: String!, email: String!) {
-      createSubscriber(data: {name: $name, email: $email}) {
-         id
-      }
-   }
-`;
+
+// forma de escrever a mutation sem usar o graphql-codegen {}
+   // import { gql, useMutation } from "@apollo/client";
+
+   // a exclamacao depois do tipo significa que eh um parametro obrigatorio
+   // const CREATE_SUBSCRIBER_MUTATION = gql`
+   //    mutation CreateSubscriber ($name: String!, email: String!) {
+   //       createSubscriber(data: {name: $name, email: $email}) {
+   //          id
+   //       }
+   //    }
+   // `;
+
+   // usandro detro do Function Component {
+      // o useMutation devolve um array em que a primeira posicao retorna a funcao de criacao de usuario
+      // no segundo e o retorno dos dados criados a partir dessa mutation
+      // const [createSubscriber, { loading }] = useMutation(CREATE_SUBSCRIBER_MUTATION);
+   // }
+// }
 
 export function Subscription() {
    const navigate = useNavigate();
@@ -18,9 +29,8 @@ export function Subscription() {
    const [name, setName] = useState('');
    const [email, setEmail] = useState('');
 
-   // o useMutation devolve um array em que a primeira posicao retorna a funcao de criacao de usuario
-   // no segundo e o retorno dos dados criados a partir dessa mutation
-   const [createSubscriber, { loading }] = useMutation(CREATE_SUBSCRIBER_MUTATION);
+   const [createSubscriber, { loading }] = useCreateSubscriberMutation();
+
 
    async function handlerSubscription(event: FormEvent) {
       event.preventDefault();
@@ -32,6 +42,7 @@ export function Subscription() {
          }
       });
 
+      // vai mover o usuario para a pagina do evento depois de ser cadastrado
       navigate('/event');
    }
 
@@ -50,7 +61,9 @@ export function Subscription() {
             </div>
 
             <div className="p-8 bg-gray-700 border border-gray-500 rounded">
-               <strong>Inscreva-s gratuitamente</strong>
+               <strong className="text-2xl mb-6 block">
+                  Inscreva-se gratuitamente
+               </strong>
 
                <form onSubmit={handlerSubscription} className="flex flex-col gap-2 w-full">
                   <input 
