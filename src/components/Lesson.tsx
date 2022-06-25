@@ -12,13 +12,14 @@ interface LessonProps {
 }
 
 // no tailwind tem uma classe chamada group, essa classe tranforma elementos nao compartilhados em um grupo
-// ex: tendo um hover em um dos componentes o outro do grupo tambem sera afetado
+// ex: tendo um hover em um dos componentes o(s) outro(s) do grupo tambem sera(ão) afetado(s) desde que a classe seja colocada como "group-hover"
+// nesse caso o hover foi um exemplo mas pode ser substituido por outros tipos de eventos do css
 
 // ao utlizar o react router dom as ancoras <a> sao substituidas por Link's
 // o atributo href muda para to
 
 export function Lesson(props: LessonProps) {
-   const { slug } = useParams<{ slug: string}>();
+   const { slug } = useParams<{ slug: string }>();
 
    const isAvaliable = isPast(props.avaliableAt);
    const avaliableDateFormatted = format(props.avaliableAt, "EEEE' • 'd' de 'MMMM' • 'k'h'mm", {
@@ -28,7 +29,11 @@ export function Lesson(props: LessonProps) {
    const isActiveLesson = slug == props.slug;
 
    return (
-      <Link to="#">
+      <Link 
+         to={`/event/lessons/${props.slug}`} className={classNames('group', {
+            'pointer-events-none': !isAvaliable
+            })}
+      >
          <span className="text-gray-300 group">
             {avaliableDateFormatted}
          </span>
@@ -43,7 +48,7 @@ export function Lesson(props: LessonProps) {
                   ? (<span className={classNames('flex text-sm font-medium items-center gap-2', {
                      'text-white': isActiveLesson,
                      'text-blue-500': !isActiveLesson
-                  })}>
+                     })}>
                         <CheckCircle size={20} />
                         Conteudo liberado
                      </span>)
